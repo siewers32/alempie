@@ -4,7 +4,7 @@ from sqlalchemy import pool
 from alempie.config import settings
 from alembic import context
 from sqlmodel import SQLModel, create_engine
-from alempie.models import Account
+from alempie.models import Account, Department
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
