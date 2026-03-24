@@ -1,0 +1,14 @@
+# Editors
+.idea/
+.vscode/
+
+# Mac/OSX
+.DS_Store
+thumbs.db
+
+# Environments
+venv/
+config/.env
+
+# Cache
+__pycache__

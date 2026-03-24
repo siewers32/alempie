@@ -1,0 +1,17 @@
+[project]
+name = "alempie"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.18.4",
+    "fastapi[standard]>=0.135.2",
+    "jinja2>=3.1.6",
+    "psycopg2-binary>=2.9.11",
+    "sqlmodel>=0.0.37",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.0,<0.12"]
+build-backend = "uv_build"
