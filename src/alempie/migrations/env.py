@@ -1,17 +1,9 @@
-# 1. IMPORT_ZONE: Importeer SQLModel en jouw modellen
-from sqlmodel import SQLModel
-from alempie.models import * # Of importeer ze stuk voor stuk
 import asyncio
 from logging.config import fileConfig
 from sqlmodel import SQLModel
-# from sqlalchemy import pool
-# from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import create_async_engine
-# from sqlalchemy.ext.asyncio import async_engine_from_config
-
-# from sqlalchemy.ext.asyncio import async_engine_from_config
 from alempie.config import settings
-from alempie.models import * # Importeer hier al je modellen zodat Alembic
+from alempie.models import *
 from alembic import context
 
 # this is the Alembic Config object, which provides
