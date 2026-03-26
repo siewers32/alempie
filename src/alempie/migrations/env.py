@@ -1,10 +1,29 @@
+# alembic/env.py
 from logging.config import fileConfig
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-from alempie.config import settings
+from sqlalchemy import engine_from_config, pool
 from alembic import context
+from alempie.config import settings
+# 1. IMPORT_ZONE: Importeer SQLModel en jouw modellen
 from sqlmodel import SQLModel, create_engine
-from alempie.models import Account, Department
+from alempie.models import * # Of importeer ze stuk voor stuk
+
+# 2. METADATA_ZONE: Koppel de metadata
+target_metadata = SQLModel.metadata
+
+# ... de rest van het bestand (config, run_migrations_offline, etc.) ...
+
+# from sqlmodel import SQLModel, create_engine
+# from alempie.models import *
+# from logging.config import fileConfig
+# # from sqlalchemy import engine_from_config
+# # from sqlalchemy import pool
+# from alempie.config import settings
+# from alembic import context
+
+
+
+print("ENV.PY IS GESTART")
+print(f"DEBUG: Geregistreerde tabellen: {SQLModel.metadata.tables.keys()}")
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -16,7 +35,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
-# for 'autogenerate' support
+# for 'autogenerate' supportx
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = SQLModel.metadata # Deze aangepast voor gebruik van SQLModel

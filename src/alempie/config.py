@@ -35,7 +35,7 @@ class Settings(BaseSettings):
         """Stelt de URI samen: postgresql://user:pass@server:port/db"""
         return str(
             PostgresDsn.build(
-                scheme="postgresql",
+                scheme="postgresql+asyncpg",
                 username=self.POSTGRES_USER,
                 password=self.POSTGRES_PASSWORD,
                 host=self.POSTGRES_SERVER,

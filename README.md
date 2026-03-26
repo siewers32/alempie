@@ -41,11 +41,14 @@ src/alempie
 * `uv pip install -e .`
 * Stel `SQLALCHEMY_DATABASE_URI` samen uit .env credentials.
     * config.py
-    * verander stel url in alembic/env.py in op `SQLALCHEMY_DATABASE_URI`
+    * stel url in alembic/env.py in op `SQLALCHEMY_DATABASE_URI`
 * Pas aan in alembic.ini `script_location = src/alempie/migrations`
 * Verplaats map alembic -> src/alembie/migrations
 * Pas `script.py.mako` aan om gebruik te kunnen maken van sqlmodel
     * Voeg toe: `import sqlmodel`
+* Creëer migrations: `alembic revision --autogenerate -m "initial"`
+* Creëer tabellen: `alembic ugrade head`
+
 
 ### Models
 * Alembic maakt migrations op basis van SQLModel
