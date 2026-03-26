@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from typing import AsyncGenerator
-from .config import settings
+from alempie.config import settings
 
 # CRITIEK: De URL moet beginnen met 'postgresql+asyncpg://' 
 # of 'sqlite+aiosqlite://'

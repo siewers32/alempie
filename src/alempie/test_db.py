@@ -1,4 +1,4 @@
-from alempie.database import engine
+from alempie.database_old import engine
 from sqlmodel import select, Session
 from alempie.models import Department # Zorg dat dit pad klopt
 

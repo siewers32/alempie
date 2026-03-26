@@ -51,6 +51,7 @@ async def list_accounts(request: Request, db: AsyncSession = Depends(get_db)):
 #         context={"hello": hello_text, "departments": departments}
 #     )
 
+
 @app.get("/departments", response_class=HTMLResponse)
 async def list_departments(request: Request, db: AsyncSession = Depends(get_db)):
     statement = select(Department)

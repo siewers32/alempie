@@ -49,6 +49,11 @@ src/alempie
 * Creëer migrations: `alembic revision --autogenerate -m "initial"`
 * Creëer tabellen: `alembic ugrade head`
 
+### Alembic async
+* `alembic init -t async src/alempie/migrations`
+* diverse aanpassingen in alembic.ini en env.py
+* Eerste keer migration uitvoeren: `alembic -c src/alempie/alembic.ini revision --autogenerate -m "Initial migration"`
+
 
 ### Models
 * Alembic maakt migrations op basis van SQLModel
@@ -76,3 +81,8 @@ from .account import Account
 
 ```
 
+### Database backup
+* Backup: `pg_dump -U username -d databasenaem > /backup/backup_bestand.sql`
+* Restore: 
+    * `createdb -U gebruikersnaam nieuwe_database_naam`
+    * `psql -U gebruikersnaam -d nieuwe_database_naam -f backup_bestand.sql`

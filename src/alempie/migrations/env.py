@@ -1,29 +1,18 @@
-# alembic/env.py
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config, pool
-from alembic import context
-from alempie.config import settings
 # 1. IMPORT_ZONE: Importeer SQLModel en jouw modellen
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel
 from alempie.models import * # Of importeer ze stuk voor stuk
+import asyncio
+from logging.config import fileConfig
+from sqlmodel import SQLModel
+# from sqlalchemy import pool
+# from sqlalchemy.engine import Connection
+from sqlalchemy.ext.asyncio import create_async_engine
+# from sqlalchemy.ext.asyncio import async_engine_from_config
 
-# 2. METADATA_ZONE: Koppel de metadata
-target_metadata = SQLModel.metadata
-
-# ... de rest van het bestand (config, run_migrations_offline, etc.) ...
-
-# from sqlmodel import SQLModel, create_engine
-# from alempie.models import *
-# from logging.config import fileConfig
-# # from sqlalchemy import engine_from_config
-# # from sqlalchemy import pool
-# from alempie.config import settings
-# from alembic import context
-
-
-
-print("ENV.PY IS GESTART")
-print(f"DEBUG: Geregistreerde tabellen: {SQLModel.metadata.tables.keys()}")
+# from sqlalchemy.ext.asyncio import async_engine_from_config
+from alempie.config import settings
+from alempie.models import * # Importeer hier al je modellen zodat Alembic
+from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -35,15 +24,16 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
-# for 'autogenerate' supportx
+# for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = SQLModel.metadata # Deze aangepast voor gebruik van SQLModel
+target_metadata = SQLModel.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -57,6 +47,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
+    # url = config.get_main_option("sqlalchemy.url")
     url = settings.SQLALCHEMY_DATABASE_URI
     context.configure(
         url=url,
@@ -69,31 +60,37 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def run_migrations_online() -> None:
-    """Run migrations in 'online' mode.
+def do_run_migrations(connection):
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        render_as_batch=True if connection.dialect.name == "sqlite" else False
+    )
 
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
+    with context.begin_transaction():
+        context.run_migrations()
 
-    """
-   # Maak een configuratie aan die jouw URI gebruikt
-    configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = settings.SQLALCHEMY_DATABASE_URI
-    
-    # Maak de engine aan met de juiste URL
-    connectable = create_engine(settings.SQLALCHEMY_DATABASE_URI)
-    
-    with connectable.connect() as connection:
-        context.configure(
-            connection=connection, 
-            target_metadata=target_metadata
-        )
+async def run_migrations_online() -> None:
+    """De enige online functie die we nodig hebben."""
+    connectable = create_async_engine(
+        settings.SQLALCHEMY_DATABASE_URI, 
+        echo=True, 
+        future=True
+    )
 
-        with context.begin_transaction():
-            context.run_migrations()
+    async with connectable.connect() as connection:
+        await connection.run_sync(do_run_migrations)
 
+    await connectable.dispose()
 
+# DIT IS HET CRUCIALE GEDEELTE VOOR DE AANROEP:
 if context.is_offline_mode():
     run_migrations_offline()
 else:
-    run_migrations_online()
+    # Hier starten we de async loop correct op
+    try:
+        asyncio.run(run_migrations_online())
+    except RuntimeError:
+        # Dit vangt fouten op als er al een loop draait (bijv. in sommige IDE's)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(run_migrations_online())
