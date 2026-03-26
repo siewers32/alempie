@@ -19,4 +19,11 @@
         {% endfor %}
     </tbody>
 </table>
+<form action="/departments/add" method="post">
+    <label for="name">Naam:</label>
+    <input type="text" id="name" name="name" value="">
+    <label for="description">Beschrijving:</label>
+    <input type="text" id="description" name="description" value="">
+     <button type="submit">Toevoegen</button>
+</form>
 {% endblock %}

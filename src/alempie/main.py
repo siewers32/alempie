@@ -118,3 +118,13 @@ async def list_departments_page(request: Request, db: AsyncSession = Depends(get
             "departments": departments
         }
     )
+
+@app.post("/departments/add")
+async def add_department(
+    db: AsyncSession = Depends(get_db),
+    name: str = Form(...),
+    description: str = Form(...)
+):
+    await crud.create_department(db, name=name, description=description)
+    # Na toevoegen sturen we de gebruiker terug naar de lijst
+    return RedirectResponse(url="/departments", status_code=303)

@@ -26,3 +26,17 @@ async def create_account(db: AsyncSession, name: str, description: str, departme
     except IntegrityError:
             await db.rollback() # Maak de foutieve actie ongedaan
             raise ValueError("Afdeling bestaat niet of data is incompleet.")
+    except Exception as e:
+            await db.rollback() # Maak de foutieve actie ongedaan
+            raise e
+
+async def create_department(db: AsyncSession, name: str, description: str):
+    try:
+        new_department = Department(name=name, description=description)
+        db.add(new_department)
+        await db.commit()
+        await db.refresh(new_department)
+        return new_department
+    except Exception as e:
+        await db.rollback()
+        raise e
