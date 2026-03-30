@@ -86,4 +86,4 @@ from .account import Account
 * Restore: 
     * `createdb -U gebruikersnaam nieuwe_database_naam`
     * `psql -U gebruikersnaam -d nieuwe_database_naam -f backup_bestand.sql`
-    * Na restore serial-waarde (auto-increment) updaten: `SELECT setval(pg_get_serial_sequence('account', 'id'), max(id)) FROM account;`
+    * Na restore serial-waarde (auto-increment) updaten: `SELECT setval(pg_get_serial_sequence('tabelnaam', 'id'), max(id)) FROM tabelnaam;`

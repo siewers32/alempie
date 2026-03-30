@@ -128,3 +128,24 @@ async def add_department(
     await crud.create_department(db, name=name, description=description)
     # Na toevoegen sturen we de gebruiker terug naar de lijst
     return RedirectResponse(url="/departments", status_code=303)
+
+@app.post("/accounts/update/{account_id}")
+async def update_account(
+    account_id: int,
+    db: AsyncSession = Depends(get_db),
+    name: str = Form(...),
+    description: str = Form(...),
+    department_id: int = Form(...)
+):
+    updated_account = await crud.update_account(
+        db, 
+        account_id=account_id, 
+        name=name, 
+        description=description, 
+        department_id=department_id
+    )
+    
+    if not updated_account:
+        return RedirectResponse(url="/accounts", status_code=404)
+    
+    return RedirectResponse(url="/accounts", status_code=303)
